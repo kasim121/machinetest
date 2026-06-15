@@ -8,7 +8,7 @@ class RiverpodRestaurantScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncRestaurants = ref.watch(restaurantListProvider);
+    final asyncResp = ref.watch(restaurantApiProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -20,22 +20,24 @@ class RiverpodRestaurantScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: asyncRestaurants.when(
-        data: (restaurants) => restaurants.isEmpty
-            ? const Center(child: Text('No restaurants'))
-            : ListView.builder(
-                itemCount: restaurants.length,
-                itemBuilder: (context, index) {
-                  final restaurant = restaurants[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(restaurant.name),
-                      subtitle: Text(restaurant.cuisines.join(', ')),
-                      trailing: Text(restaurant.rating.average.toString()),
-                    ),
-                  );
-                },
-              ),
+      body: asyncResp.when(
+        data: (resp) {
+          final restaurants = resp.restaurants;
+          if (restaurants.isEmpty) return const Center(child: Text('No restaurants'));
+          return ListView.builder(
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = restaurants[index];
+              return Card(
+                child: ListTile(
+                  title: Text(restaurant.name),
+                  subtitle: Text(restaurant.cuisines.join(', ')),
+                  trailing: Text(restaurant.rating.average.toString()),
+                ),
+              );
+            },
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text(e.toString())),
       ),
