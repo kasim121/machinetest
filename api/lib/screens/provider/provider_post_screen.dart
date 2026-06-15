@@ -1,4 +1,4 @@
-import 'package:api/stateproviderblocriverpod/provider/post_provider.dart';
+import 'package:api/states/provider/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:api/screens/widgets/post_detail_screen.dart';

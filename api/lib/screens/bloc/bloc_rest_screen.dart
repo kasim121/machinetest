@@ -1,6 +1,6 @@
-import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurent_bloc.dart';
-import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurant_event.dart';
-import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurant_state.dart';
+import 'package:api/states/bloc/restaurents/restaurent_bloc.dart';
+import 'package:api/states/bloc/restaurents/restaurant_event.dart';
+import 'package:api/states/bloc/restaurents/restaurant_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

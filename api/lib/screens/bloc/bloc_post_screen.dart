@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:api/stateproviderblocriverpod/bloc/posts/post_bloc.dart';
-import 'package:api/stateproviderblocriverpod/bloc/posts/post_event.dart';
-import 'package:api/stateproviderblocriverpod/bloc/posts/post_state.dart';
+import 'package:api/states/bloc/posts/post_bloc.dart';
+import 'package:api/states/bloc/posts/post_event.dart';
+import 'package:api/states/bloc/posts/post_state.dart';
 import 'package:api/screens/widgets/post_detail_screen.dart';
 
 class BlocPostScreen extends StatefulWidget {

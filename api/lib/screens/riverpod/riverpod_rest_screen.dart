@@ -1,51 +1,44 @@
-import 'package:api/stateproviderblocriverpod/riverpod/riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../states/riverpod/restaurent_notifier.dart';
 
-class RiverpodRestaurantScreen extends ConsumerStatefulWidget {
+class RiverpodRestaurantScreen extends ConsumerWidget {
   const RiverpodRestaurantScreen({super.key});
 
   @override
-  ConsumerState<RiverpodRestaurantScreen> createState() => _RiverpodRestaurantScreenState();
-}
-
-class _RiverpodRestaurantScreenState extends ConsumerState<RiverpodRestaurantScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(restaurantResponseProvider.notifier).fetchRestaurants();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final restaurants = ref.watch(restaurantResponseProvider)?.restaurants ?? [];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncRestaurants = ref.watch(restaurantListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Restaurants (Riverpod)"), actions: [
-        IconButton(
-          icon: const Icon(Icons.article),
-          onPressed: () => Navigator.pushNamed(context, '/riverpod/posts'),
-        )
-      ]),
-      body: restaurants.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, index) {
-                final restaurant = restaurants[index];
-
-                return Card(
-                  child: ListTile(
-                    title: Text(restaurant.name),
-                    subtitle: Text(restaurant.cuisines.join(', ')),
-                    trailing: Text(restaurant.rating.average.toString()),
-                  ),
-                );
-              },
-            ),
+      appBar: AppBar(
+        title: const Text("Restaurants (Riverpod)"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.article),
+            onPressed: () => context.push('/riverpod/posts'),
+          ),
+        ],
+      ),
+      body: asyncRestaurants.when(
+        data: (restaurants) => restaurants.isEmpty
+            ? const Center(child: Text('No restaurants'))
+            : ListView.builder(
+                itemCount: restaurants.length,
+                itemBuilder: (context, index) {
+                  final restaurant = restaurants[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(restaurant.name),
+                      subtitle: Text(restaurant.cuisines.join(', ')),
+                      trailing: Text(restaurant.rating.average.toString()),
+                    ),
+                  );
+                },
+              ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(child: Text(e.toString())),
+      ),
     );
   }
 }
