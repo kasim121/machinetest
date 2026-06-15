@@ -1,6 +1,7 @@
 import 'package:api/stateproviderblocriverpod/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 class RestaurantScreen extends StatefulWidget {
   const RestaurantScreen({super.key});
@@ -24,7 +25,15 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Restaurants")),
+      appBar: AppBar(
+        title: const Text("Restaurants"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.article),
+            onPressed: () => context.push('/provider/posts'),
+          ),
+        ],
+      ),
       body: Consumer<RestaurantViewProvider>(
         builder: (context, vm, child) {
           switch (vm.apiStatus) {
@@ -54,6 +63,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                       subtitle: Text(restaurant.cuisines.join(', ')),
 
                       trailing: Text(restaurant.rating.average.toString()),
+                      onTap: () => context.push('/provider/posts'),
                     ),
                   );
                 },

@@ -1,27 +1,26 @@
 import 'package:api/service/service.dart';
 import 'package:api/stateproviderblocriverpod/provider/provider.dart';
-import 'package:api/screens/provider_rest_screen.dart';
+import 'package:api/stateproviderblocriverpod/provider/post_provider.dart';
+import 'package:api/screens/provider/provider_rest_screen.dart';
+import 'package:api/screens/provider/provider_post_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as prov;
+import 'package:go_router/go_router.dart';
+import 'package:api/router/provider_router.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // optional but safe
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
-    // MultiProvider version (commented out). Use this when you need to register multiple providers:
-    // MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(
-    //       create: (_) => RestaurantViewProvider(ApiService()),
-    //     ),
-    //     // Add other providers here
-    //   ],
-    //   child: const MyApp(),
-    // ),
-
-    // Single provider version (active):
-    ChangeNotifierProvider<RestaurantViewProvider>(
-      create: (_) => RestaurantViewProvider(ApiService()),
+    prov.MultiProvider(
+      providers: [
+        prov.ChangeNotifierProvider(
+          create: (_) => RestaurantViewProvider(ApiService()),
+        ),
+        prov.ChangeNotifierProvider(
+          create: (_) => PostViewProvider(ApiService()),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -32,6 +31,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: RestaurantScreen());
+    return MaterialApp.router(routerConfig: providerRouter);
   }
 }

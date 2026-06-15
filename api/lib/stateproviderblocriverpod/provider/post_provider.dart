@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:api/models/restaurant_response.dart';
+import 'package:api/models/post.dart';
 import 'package:api/service/service.dart';
 
-enum ApiStatus {
-  initial,
-  loading,
-  success,
-  error,
-}
+enum ApiStatus { initial, loading, success, error }
 
-class RestaurantViewProvider extends ChangeNotifier {
+class PostViewProvider extends ChangeNotifier {
   final ApiService apiService;
-
-  RestaurantViewProvider(this.apiService);
+  PostViewProvider(this.apiService);
 
   ApiStatus _apiStatus = ApiStatus.initial;
   String? _errorMessage;
-  ApiResponse? _restaurantResponse;
+  List<Post> _posts = [];
 
   ApiStatus get apiStatus => _apiStatus;
   String? get errorMessage => _errorMessage;
-  ApiResponse? get restaurantResponse => _restaurantResponse;
+  List<Post> get posts => _posts;
 
-  Future<void> fetchRestaurants() async {
+  Future<void> fetchPosts() async {
     try {
       _apiStatus = ApiStatus.loading;
       _errorMessage = null;
-
       notifyListeners();
 
-      _restaurantResponse =
-          await apiService.getRestaurants();
-
+      _posts = await apiService.getPosts();
       _apiStatus = ApiStatus.success;
     } catch (e) {
       _errorMessage = e.toString();

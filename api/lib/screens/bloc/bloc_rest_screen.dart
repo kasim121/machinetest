@@ -1,8 +1,9 @@
-import 'package:api/stateproviderblocriverpod/bloc/bloc.dart';
-import 'package:api/stateproviderblocriverpod/bloc/restaurant_event.dart';
-import 'package:api/stateproviderblocriverpod/bloc/restaurant_state.dart';
+import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurent_bloc.dart';
+import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurant_event.dart';
+import 'package:api/stateproviderblocriverpod/bloc/restaurents/restaurant_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class BlocRestaurantScreen extends StatefulWidget {
   const BlocRestaurantScreen({super.key});
@@ -26,7 +27,12 @@ class _BlocRestaurantScreenState extends State<BlocRestaurantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Restaurants (Bloc)")),
+      appBar: AppBar(title: const Text("Restaurants (Bloc)"), actions: [
+        IconButton(
+          icon: const Icon(Icons.article),
+          onPressed: () => context.push('/bloc/posts'),
+        )
+      ]),
       body: BlocBuilder<RestaurantBloc, RestaurantState>(
         builder: (context, state) {
           if (state is RestaurantInitial) {
@@ -48,6 +54,7 @@ class _BlocRestaurantScreenState extends State<BlocRestaurantScreen> {
                     title: Text(restaurant.name),
                     subtitle: Text(restaurant.cuisines.join(', ')),
                     trailing: Text(restaurant.rating.average.toString()),
+                    onTap: () => context.push('/bloc/posts'),
                   ),
                 );
               },

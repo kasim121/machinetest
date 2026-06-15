@@ -24,7 +24,12 @@ class _RiverpodRestaurantScreenState extends ConsumerState<RiverpodRestaurantScr
     final restaurants = ref.watch(restaurantResponseProvider)?.restaurants ?? [];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Restaurants (Riverpod)")),
+      appBar: AppBar(title: const Text("Restaurants (Riverpod)"), actions: [
+        IconButton(
+          icon: const Icon(Icons.article),
+          onPressed: () => Navigator.pushNamed(context, '/riverpod/posts'),
+        )
+      ]),
       body: restaurants.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(

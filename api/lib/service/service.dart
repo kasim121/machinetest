@@ -1,6 +1,7 @@
 import 'dart:convert'; // used to decode JSON response
 import 'package:http/http.dart' as http; // http client
 import '../models/restaurant_response.dart'; // ApiResponse model
+import 'package:api/models/post.dart';
 
 // ApiService: performs HTTP requests to fetch restaurant data
 // - Uses `http` to make a GET request to a sample endpoint
@@ -83,6 +84,29 @@ class ApiService {
 
     // TRACE: Non-200 response -> treated as error; caller receives exception
     throw Exception('Failed to load data');
+  }
+
+  // Fetch list of posts (example using jsonplaceholder)
+  Future<List<Post>> getPosts() async {
+    final postsUrl = 'https://jsonplaceholder.typicode.com/posts';
+    final response = await http.get(Uri.parse(postsUrl));
+    // TRACE: response.statusCode, response.body etc.
+    if (response.statusCode == 200) {
+      final jsonList = jsonDecode(response.body) as List<dynamic>;
+      return jsonList.map((e) => Post.fromJson(e as Map<String, dynamic>)).toList();
+    }
+    throw Exception('Failed to load posts');
+  }
+
+  // Fetch single post by id
+  Future<Post> getPostById(int id) async {
+    final detailUrl = 'https://jsonplaceholder.typicode.com/posts/$id';
+    final response = await http.get(Uri.parse(detailUrl));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      return Post.fromJson(json);
+    }
+    throw Exception('Failed to load post');
   }
 
   // Example of expected JSON payload and mapping to models:
